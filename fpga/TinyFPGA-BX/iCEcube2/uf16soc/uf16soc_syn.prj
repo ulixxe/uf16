@@ -1,0 +1,76 @@
+#-- Synopsys, Inc.
+#-- Project file /mnt/hgfs/Projects/Bitbucket/uf16/libs/uf16/fpga/TinyFPGA-BX/uf16soc/uf16soc_syn.prj
+#project files
+
+add_file -verilog -lib usb_cdc_lib "../../../../common/hdl/usb_cdc_lib/phy_tx.v" 
+add_file -verilog -lib usb_cdc_lib "../../../../common/hdl/usb_cdc_lib/phy_rx.v" 
+add_file -verilog -lib usb_cdc_lib "../../../../common/hdl/usb_cdc_lib/sie.v" 
+add_file -verilog -lib usb_cdc_lib "../../../../common/hdl/usb_cdc_lib/ctrl_endp.v" 
+add_file -verilog -lib usb_cdc_lib "../../../../common/hdl/usb_cdc_lib/in_fifo.v" 
+add_file -verilog -lib usb_cdc_lib "../../../../common/hdl/usb_cdc_lib/out_fifo.v" 
+add_file -verilog -lib usb_cdc_lib "../../../../common/hdl/usb_cdc_lib/bulk_endp.v" 
+add_file -verilog -lib usb_cdc_lib "../../../../common/hdl/usb_cdc_lib/usb_cdc.v" 
+add_file -verilog -lib ip_rtl_lib "../../../../common/hdl/ip_rtl_lib/prescaler.v" 
+add_file -verilog -lib ip_rtl_lib "../../../../common/hdl/ip_rtl_lib/fifo_if.v" 
+add_file -verilog -lib ip_rtl_lib "../../../../common/hdl/ip_rtl_lib/timer.v" 
+add_file -verilog -lib ip_rtl_lib "../../../../common/hdl/ip_rtl_lib/gpio.v" 
+add_file -verilog -lib ip_rtl_lib "../../../../common/hdl/ip_rtl_lib/irqck.v" 
+add_file -verilog -lib ip_rtl_lib "../../../../common/hdl/ip_rtl_lib/vic.v" 
+add_file -verilog -lib mem_lib "../../../../common/hdl/mem_ice40_lib/soc_rom.v" 
+add_file -verilog -lib mem_lib "../../../../common/hdl/mem_ice40_lib/soc_ram.v" 
+add_file -verilog -lib uf16soc_lib "../../../../uf16/hdl/uf16.v" 
+add_file -verilog -lib uf16soc_lib "../../hdl/uf16soc/app.v" 
+add_file -verilog -lib uf16soc_lib "../../hdl/uf16soc/uf16soc.v" 
+add_file -constraint -lib work "constraints/clk.sdc"
+#implementation: "uf16soc_Implmnt"
+impl -add uf16soc_Implmnt -type fpga
+
+#implementation attributes
+set_option -vlog_std v2001
+set_option -project_relative_includes 1
+
+#device options
+set_option -technology SBTiCE40
+set_option -part iCE40LP8K
+set_option -package CM81
+set_option -speed_grade 
+set_option -part_companion ""
+
+#compilation/mapping options
+set_option -top_module "uf16soc_lib.uf16soc"
+
+# mapper_options
+set_option -frequency auto
+set_option -write_verilog 0
+set_option -write_vhdl 0
+
+# Silicon Blue iCE40
+set_option -maxfan 10000
+set_option -disable_io_insertion 0
+set_option -pipe 1
+set_option -retiming 0
+set_option -update_models_cp 0
+set_option -fixgatedclocks 2
+set_option -fixgeneratedclocks 0
+
+# NFilter
+set_option -popfeed 0
+set_option -constprop 0
+set_option -createhierarchy 0
+
+# sequential_optimization_options
+set_option -symbolic_fsm_compiler 1
+
+# Compiler Options
+set_option -compiler_compatible 0
+set_option -resource_sharing 1
+
+#automatic place and route (vendor) options
+set_option -write_apr_constraint 1
+
+#set result format/file last
+project -result_format "edif"
+project -result_file ./uf16soc_Implmnt/uf16soc.edf
+project -log_file "./uf16soc_Implmnt/uf16soc.srr"
+impl -active uf16soc_Implmnt
+project -run synthesis -clean
